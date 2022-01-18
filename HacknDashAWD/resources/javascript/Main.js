@@ -1,11 +1,17 @@
-import View from "./View.js"; 
+import { ChangeBG } from "./View.js";
+import { PlayerUpdate, RegisterEventListener } from "./Character.js";
+
 
 window.onload = start();
 
-let view = new View();
+
+let bg = new ChangeBG();
+let pu = new PlayerUpdate();
+let el = new RegisterEventListener();
 
 function start(){
 
+   
     setAnimator(30);
     
 }
@@ -20,7 +26,12 @@ function setAnimator(fps){
 // Called on every frame
 function update(){
     
-    view.changeBG();
+
+    bg = new ChangeBG();
+    pu = new PlayerUpdate();
+
 }
+
+
 
 
