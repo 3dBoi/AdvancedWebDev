@@ -2,17 +2,21 @@
 
 let posy = 0;
 let posx = 0;
-let moverate = 5;
+let vx = 0;
+let vy = 0;
 let cube = document.getElementById("player");
 let cubeBounds = cube.getBoundingClientRect();
+let holdLeft = false;
+let holdRight = false;
+let onGround = false;
+let gravity = 5;
+let friction = 0.7;
 
 
 // Update Player Position
 export function PlayerUpdate(){
 
-    console.log(posx);
-    console.log(posy);
-    console.log(cube);
+    updatePosition();
     
     cube.style.top = posy+"px";
     cube.style.left = posx+"px";
@@ -23,27 +27,32 @@ export function RegisterEventListener(){
 
     window.addEventListener("keydown", function(event) {
 
-        console.log(event.code);
+        if (event.code === "ArrowUp"){
 
-        if(event.code === "ArrowDown"){
-
-            console.log(event.code);
-            posy = updateYPosition(moverate);
-            
-        } else if (event.code === "ArrowUp"){
-
-            console.log(event.code);
-            posy = updateYPosition(-moverate);
+            if(onGround){
+                onGround = false;
+                vy = -50;
+            }
             
         } else if (event.code === "ArrowLeft"){
 
-            console.log(event.code);
-            posx = updateXPosition(-moverate);
+            holdLeft = true;
+
+            if(onGround){
+                vx = -30;
+            }else{
+                vx = -10;
+            }
             
         } else if (event.code === "ArrowRight"){
 
-            console.log(event.code);
-            posx = updateXPosition(moverate);
+            holdRight = true;
+
+            if(onGround){
+                vx = 30;
+            }else{
+                vx = 10;
+            }
             
         }
 
@@ -51,6 +60,40 @@ export function RegisterEventListener(){
 
     }, true)
 
+    window.addEventListener("keyup", function(event) {
+
+        if (event.code === "ArrowRight"){
+
+            holdRight = false;
+            
+        } else if (event.code === "ArrowLeft"){
+
+            holdLeft = false;
+        }
+
+        event.preventDefault();
+
+    }, true)
+
+
+}
+
+// Updates Position regarding the cubes velocity
+function updatePosition(){
+
+    vy = vy+gravity;
+    if(!holdLeft&&onGround&&vx<0){
+        vx = vx*friction;
+    }
+    if(!holdRight&&onGround&&vx>0){
+        vx = vx*friction;
+    }
+    if(-0.1<=vx&&vx<=0.1){
+        vx=0;
+    }
+
+    posx = updateXPosition(vx);
+    posy = updateYPosition(vy)
 
 }
 
@@ -61,9 +104,9 @@ function updateXPosition(moverate){
     posx = posx + moverate;
 
     if(posx<0){
-        posx = window.innerWidth-cubeBounds.width;
-    }else if (posx>window.innerWidth-cubeBounds.width) {
         posx = 0;
+    }else if (posx>window.innerWidth-cubeBounds.width) {
+        posx = window.innerWidth-cubeBounds.width;
     }
 
     return posx;
@@ -75,10 +118,11 @@ function updateYPosition(moverate){
 
     posy = posy + moverate;
 
-    if(posy<0){
+    onGround = false;
+
+    if (posy>window.innerHeight-cubeBounds.height) {
         posy = window.innerHeight-cubeBounds.height;
-    }else if (posy>window.innerHeight-cubeBounds.height) {
-        posy = 0;
+        onGround = true;
     }
 
     return posy;
