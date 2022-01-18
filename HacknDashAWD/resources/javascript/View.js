@@ -22,30 +22,25 @@ export default class View{
         return color;
     }
 
+    checkDirection(color, direction){
+
+        if(color>=255){
+            direction = false;
+        }
+        if(color<=0){
+            direction = true;
+        }
+
+        return direction;
+
+    }
+
     // Backgroundcolor Fade Animation
     changeBG(){
-        
-    
-        if(this.red>=255){
-            this.redDirection = false;
-        }
-        if(this.red<=0){
-            this.redDirection = true;
-        }
-    
-        if(this.green>=255){
-            this.greenDirection = false;
-        }
-        if(this.green<=0){
-            this.greenDirection = true;
-        }
-    
-        if(this.blue>=255){
-            this.blueDirection = false;
-        }
-        if(this.blue<=0){
-            this.blueDirection = true;
-        }
+
+        this.redDirection = this.checkDirection(this.red, this.redDirection);
+        this.greenDirection = this.checkDirection(this.green, this.greenDirection);
+        this.blueDirection = this.checkDirection(this.blue, this.blueDirection);
     
         this.red = this.iterateColor(this.red, this.redDirection);
         this.green = this.iterateColor(this.green, this.greenDirection);

@@ -2,3 +2,9 @@ body {
     min-height: 100vh;
     margin: 0;
 }
+
+#player {
+    width: 100px;
+    height: 100px;
+    background-color: black;
+}
