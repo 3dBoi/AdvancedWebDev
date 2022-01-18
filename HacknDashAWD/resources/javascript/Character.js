@@ -1,7 +1,7 @@
 
 
-let posy = 50;
-let posx = 50;
+let posy = 0;
+let posx = 0;
 let moverate = 5;
 let cube = document.getElementById("player");
 
