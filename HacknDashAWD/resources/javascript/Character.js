@@ -1,4 +1,4 @@
-import { Collision,YPosition } from "./Plattform.js";
+import { Collision,YPosition } from "./Platform.js";
 
 let posy = 0;
 let posx = 0;
@@ -33,7 +33,7 @@ export function RegisterEventListener(){
 
             if(onGround){
                 onGround = false;
-                vy = -50;
+                vy = -70;
             }
             
         } else if (event.code === "ArrowLeft"){
@@ -127,7 +127,6 @@ function updateYPosition(moverate){
         posy = window.innerHeight-cubeBounds.height;
         onGround = true;
     } else if(moverate>0&&Collision()){
-        console.log("COLLISION");
         posy = YPosition()-cubeBounds.height;
         vy = 0;
         onGround = true;

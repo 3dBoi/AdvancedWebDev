@@ -1,6 +1,6 @@
 import { ChangeBG } from "./View.js";
 import { PlayerUpdate, RegisterEventListener } from "./Character.js";
-import { InstantiatePlattforms } from "./Plattform.js";
+import { InstantiatePlatforms } from "./Platform.js";
 
 
 window.onload = start();
@@ -14,7 +14,7 @@ let scorePoints = 0;
 
 function start(){
 
-    let n = InstantiatePlattforms();
+    let n = InstantiatePlatforms();
     setAnimator(30);
     
 }

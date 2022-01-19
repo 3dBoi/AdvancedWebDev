@@ -3,6 +3,11 @@ body {
     margin: 0;
 }
 
+#score {
+    font-size: 2em;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 #player {
     width: 100px;
     height: 100px;
@@ -10,7 +15,7 @@ body {
     position: absolute;
 }
 
-.plattform {
+.platform {
     width: 300px;
     height: 30px;
     background-color: black;
