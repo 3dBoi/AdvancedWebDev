@@ -10,8 +10,6 @@ let blueDirection = true;
 // Backgroundcolor Fade Animation
 export function ChangeBG(){
 
-    console.log(red);
-
     redDirection = checkDirection(red, redDirection);
     greenDirection = checkDirection(green, greenDirection);
     blueDirection = checkDirection(blue, blueDirection);
@@ -21,8 +19,6 @@ export function ChangeBG(){
     blue = iterateColor(blue, blueDirection);
 
     let color = "rgb("+red+","+green+","+blue+")";
-    
-    //console.log("Backgroundcolor: "+color);
 
     document.body.style.backgroundColor = color;
 

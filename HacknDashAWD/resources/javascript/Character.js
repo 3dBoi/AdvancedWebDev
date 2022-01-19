@@ -1,4 +1,4 @@
-
+import { Collision,YPosition } from "./Plattform.js";
 
 let posy = 0;
 let posx = 0;
@@ -11,6 +11,8 @@ let holdRight = false;
 let onGround = false;
 let gravity = 5;
 let friction = 0.7;
+//let collision = new Collision(cubeBounds);
+//let yPosition = new YPosition();
 
 
 // Update Player Position
@@ -82,6 +84,7 @@ export function RegisterEventListener(){
 function updatePosition(){
 
     vy = vy+gravity;
+
     if(!holdLeft&&onGround&&vx<0){
         vx = vx*friction;
     }
@@ -122,6 +125,11 @@ function updateYPosition(moverate){
 
     if (posy>window.innerHeight-cubeBounds.height) {
         posy = window.innerHeight-cubeBounds.height;
+        onGround = true;
+    } else if(moverate>0&&Collision()){
+        console.log("COLLISION");
+        posy = YPosition()-cubeBounds.height;
+        vy = 0;
         onGround = true;
     }
 
