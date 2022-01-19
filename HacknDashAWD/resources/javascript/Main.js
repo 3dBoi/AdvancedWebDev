@@ -5,17 +5,18 @@ import { InstantiatePlatforms } from "./Platform.js";
 
 window.onload = start();
 
-
-let bg = new ChangeBG();
-let pu = new PlayerUpdate();
-let el = new RegisterEventListener();
 let score = document.getElementById("score");
 let scorePoints = 0;
+let deltaTime;
+let lastUpdate = Date.now();
 
 function start(){
 
-    let n = InstantiatePlatforms();
+
+    InstantiatePlatforms();
+    RegisterEventListener();
     setAnimator(30);
+    
     
 }
 
@@ -29,10 +30,13 @@ function setAnimator(fps){
 
 // Called on every frame
 function update(){
-    
-    score.innerHTML = "Score: "+scorePoints++;
-    bg = new ChangeBG();
-    pu = new PlayerUpdate();
+    let now = Date.now();
+    deltaTime = now - lastUpdate;
+    lastUpdate = now;
+
+    score.innerHTML = "Score: "+Math.floor(scorePoints+=deltaTime);
+    ChangeBG();
+    PlayerUpdate(deltaTime);
     
 
 }

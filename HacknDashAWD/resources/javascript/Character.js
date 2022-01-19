@@ -9,15 +9,14 @@ let cubeBounds = cube.getBoundingClientRect();
 let holdLeft = false;
 let holdRight = false;
 let onGround = false;
-let gravity = 5;
-let friction = 0.7;
-//let collision = new Collision(cubeBounds);
-//let yPosition = new YPosition();
-
+let gravity = 0.2;
+let friction = 0.5;
+let deltaTime;
 
 // Update Player Position
-export function PlayerUpdate(){
-
+export function PlayerUpdate(dt){
+    
+    deltaTime = dt;
     updatePosition();
     
     cube.style.top = posy+"px";
@@ -33,7 +32,7 @@ export function RegisterEventListener(){
 
             if(onGround){
                 onGround = false;
-                vy = -70;
+                vy = -2;
             }
             
         } else if (event.code === "ArrowLeft"){
@@ -41,9 +40,9 @@ export function RegisterEventListener(){
             holdLeft = true;
 
             if(onGround){
-                vx = -30;
+                vx = -0.5;
             }else{
-                vx = -10;
+                vx = -0.2;
             }
             
         } else if (event.code === "ArrowRight"){
@@ -51,9 +50,9 @@ export function RegisterEventListener(){
             holdRight = true;
 
             if(onGround){
-                vx = 30;
+                vx = 0.5;
             }else{
-                vx = 10;
+                vx = 0.2;
             }
             
         }
@@ -104,7 +103,7 @@ function updatePosition(){
 function updateXPosition(moverate){
 
 
-    posx = posx + moverate;
+    posx = posx + moverate*deltaTime;
 
     if(posx<0){
         posx = 0;
@@ -119,7 +118,7 @@ function updateXPosition(moverate){
 // Update Position for Y, Spawns on opposite side on leaving window
 function updateYPosition(moverate){
 
-    posy = posy + moverate;
+    posy = posy + moverate*deltaTime;
 
     onGround = false;
 
