@@ -1,19 +1,29 @@
+import { DeltaTime } from "./Main.js";
+import { velocity } from "./Character.js";
+
+
 
 let collisionPlatformY;
 let minDistance = 300;
-let platformcount = 10;
+let startplatforms = 12;
 let platformHeight = 30;
-let collisionDistance = 35;
+let minPlatforms = 8;
+let collisionDistance;
+let platforms;
+let player;
+let platformVY = 50;
 
 
 export function Collision(){
 
-    let platforms = document.getElementsByClassName("platform");
+    platforms = document.getElementsByClassName("platform");
 
-    let player = document.getElementById("player").getBoundingClientRect();
+    player = document.getElementById("player").getBoundingClientRect();
 
     let bottomEdgePlayerA = [player.left , (player.top+player.height)];
     let bottomEdgePlayerB = [(player.left+player.width) , (player.top+player.height)];
+
+    collisionDistance = (velocity+platformVY)*0.1;
 
     for(let i = 0; i<platforms.length; i++){
 
@@ -28,11 +38,11 @@ export function Collision(){
         let distanceA = distance(bottomEdgePlayerA, intersectionA);
         let distanceB = distance(bottomEdgePlayerB, intersectionB);
 
-        if(distanceA<=collisionDistance&&inBounds(intersectionA, topEdgePlatform, vectorEdge)){
+        if(abovePlatform(platformBounds)&&distanceA<=collisionDistance&&inBounds(intersectionA, topEdgePlatform, vectorEdge)){
             
             collisionPlatformY = platformBounds.top;
             return true;
-        } else if(distanceB<=collisionDistance&&inBounds(bottomEdgePlayerB, topEdgePlatform, vectorEdge)){
+        } else if(abovePlatform(platformBounds)&&distanceB<=collisionDistance&&inBounds(bottomEdgePlayerB, topEdgePlatform, vectorEdge)){
 
             collisionPlatformY = platformBounds.top;
             return true;
@@ -44,9 +54,73 @@ export function Collision(){
 
 }
 
+export function PlatformVY(){
+
+    return platformVY;
+}
+
 export function YPosition(){
 
     return collisionPlatformY;
+}
+
+export function MovePlatforms(){
+
+    platformVY += 0.1;
+
+    platforms = document.getElementsByClassName("platform");
+
+    if(platforms.length<minPlatforms){
+
+        let parent = document.getElementById("platforms");
+        let newChild = newPlatform();
+        newChild.style.top = 0+"px";
+
+        if(platforms.length>0){
+            if(!checkPlatformDistances(parent, newChild)){
+                parent.appendChild(newChild);
+            }
+        }
+    }
+
+    for(let i = 0; i<platforms.length; i++){
+
+        let platformPosY = parseInt(platforms[i].style.top);
+        platforms[i].style.top = platformPosY+platformVY*(DeltaTime()*0.001)+"px";
+
+        if((parseInt(platforms[i].style.top)+parseInt(platforms[i].style.height))>window.innerHeight){
+
+            destroyPlatform(platforms[i]);
+
+            let parent = document.getElementById("platforms");
+            let newChild = newPlatform();
+            newChild.style.top = 0+"px";
+
+            if(platforms.length>0){
+                if(!checkPlatformDistances(parent, newChild)){
+                    parent.appendChild(newChild);
+                }
+            }
+        }
+
+    }
+}
+
+function destroyPlatform(platform){
+
+    platform.parentNode.removeChild(platform);
+
+}
+
+function newPlatform(){
+
+    let child = document.createElement("div");
+    child.className = "platform";
+    child.style.width = getRandomArbitrary(150, 300)+"px";
+    child.style.height = platformHeight+"px";
+    child.style.left = getRandomArbitrary(0, (window.innerWidth-parseInt(child.style.width)))+"px";
+    return child;
+
 }
 
 function intersection(pointPlayer , edge, vectorEdge){
@@ -98,6 +172,17 @@ function inBounds(intersection, edge, vectorEdge){
     }
 }
 
+function abovePlatform(edgeBounds){
+
+    if((player.top+player.height)<edgeBounds.top+5){
+        return true;
+    }
+
+    return false;
+
+
+}
+
 function determinante(a11, a12, a21, a22){
 
     return (a11*a22) - (a21*a12);
@@ -108,14 +193,10 @@ export function InstantiatePlatforms(){
 
     let parent = document.getElementById("platforms");
 
-    for(let i = 0; i<=platformcount; i++){
+    for(let i = 0; i<=startplatforms; i++){
 
-        let child = document.createElement("div");
-        child.className = "platform";
-        child.style.width = getRandomArbitrary(150, 300)+"px";
-        child.style.height = platformHeight+"px";
+        let child = newPlatform();
         child.style.top = getRandomArbitrary(0, (window.innerHeight-parseInt(child.style.height)))+"px";
-        child.style.left = getRandomArbitrary(0, (window.innerWidth-parseInt(child.style.width)))+"px";
 
         if(i>0){
             if(!checkPlatformDistances(parent, child)){
@@ -125,6 +206,8 @@ export function InstantiatePlatforms(){
             }
         }
     }
+
+
 }
 
 // Check if another Platform is near
