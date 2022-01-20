@@ -17,6 +17,7 @@ let friction = 900;
 let speedGround = 400;
 let speedAir = 100;
 let jumpheight = 1300;
+let onFloor = false;
 
 export let velocity;
 
@@ -143,12 +144,14 @@ function updateYPosition(){
     vy = vy + (ay * (DeltaTime()*0.001));
 
     onGround = false;
+    onFloor = false;
 
     if (posy>window.innerHeight-playerBounds.height) {
         posy = window.innerHeight-playerBounds.height;
         vy = 0;
         ay = 0;
         onGround = true;
+        onFloor = true;
     } else if(vy>0&&Collision()){
         posy = YPosition()-playerBounds.height;
         vy = PlatformVY();
@@ -174,6 +177,14 @@ function calcVelocity(v1, v2){
 
     return Math.sqrt(Math.pow(v1, 2) + Math.pow(v2, 2));
 
+}
+
+export function CheckGameOver(){
+
+    if(onFloor){
+        return true;
+    }
+    return false;
 }
 
     
