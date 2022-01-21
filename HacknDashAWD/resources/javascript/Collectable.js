@@ -7,6 +7,7 @@ let collisionDistance;
 let radius = 25;
 let points = 10000;
 
+// Collision between Player and Collectable
 function collectableCollision(){
 
     let player = document.getElementById("player").getBoundingClientRect();
@@ -66,6 +67,7 @@ function collectableCollision(){
 
 }
 
+// Intersectionpoint
 function intersection(edgePointA, edgePointB, point){
 
     let vectorEdge = [edgePointB[0]-edgePointA[0] , edgePointB[1]-edgePointA[1]];
@@ -93,6 +95,7 @@ function distance(p1, p2){
     return (Math.sqrt(Math.pow(p1[0]-p2[0], 2)+ Math.pow(p1[1]-p2[1], 2)))-radius;
 }
 
+// In Bounds of Rectangle
 function inBounds(intersection, edgePointA, edgePointB){
 
     let vectorEdge = [edgePointB[0]-edgePointA[0] , edgePointB[1]-edgePointA[1]];
@@ -127,6 +130,7 @@ function destroyCollectable(collectable){
     collectable.parentNode.removeChild(collectable);
 }
 
+// If Player collides with Collectable something happens
 export function Collect(){
 
     if(collectableCollision()){
@@ -137,11 +141,12 @@ export function Collect(){
 
 }
 
+// Spawn Collectables randomly on Platform
 export function SpawnCollectable(center){
 
-    let random = Math.floor(getRandomArbitrary(0, 3));
+    let random = Math.floor(getRandomArbitrary(0,5));
 
-    if(random==1){
+    if(random==0){
 
         let newChild = newCollectable(center);
 
@@ -151,6 +156,7 @@ export function SpawnCollectable(center){
 
 }
 
+// Move Collectables at speed of platforms
 export function MoveCollectables(speed){
 
     let collectables = document.getElementsByClassName("collectable");
