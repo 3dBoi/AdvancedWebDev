@@ -1,5 +1,6 @@
 import { DeltaTime } from "./Main.js";
 import { velocity } from "./Character.js";
+import { SpawnCollectable , MoveCollectables} from "./Collectable.js";
 
 
 
@@ -78,6 +79,9 @@ export function MovePlatforms(){
 
         if(platforms.length>0){
             if(!checkPlatformDistances(parent, newChild)){
+
+                SpawnCollectable(platformCenter(newChild));
+
                 parent.appendChild(newChild);
             }
         }
@@ -98,12 +102,23 @@ export function MovePlatforms(){
 
             if(platforms.length>0){
                 if(!checkPlatformDistances(parent, newChild)){
+
+                    SpawnCollectable(platformCenter(newChild));
+
                     parent.appendChild(newChild);
                 }
             }
         }
 
     }
+
+    MoveCollectables(platformVY);
+}
+
+function platformCenter(platform){
+
+    return parseInt(platform.style.left)+(parseInt(platform.style.width)/2);
+
 }
 
 function destroyPlatform(platform){
@@ -213,11 +228,11 @@ export function InstantiatePlatforms(){
 // Check if another Platform is near
 function checkPlatformDistances(parent, platform){
 
-    let platformCenter = [(parseInt(platform.style.top)+parseInt(platform.style.height)) , (parseInt(platform.style.left)+parseInt(platform.style.width))];
+    let platformCenter = [(parseInt(platform.style.top)+(parseInt(platform.style.height)/2)) , (parseInt(platform.style.left)+(parseInt(platform.style.width)/2))];
 
     for(let i = 0; i<parent.children.length; i++){
 
-        let currCenter = [(parseInt(parent.children[i].style.top)+parseInt(parent.children[i].style.height)) , (parseInt(parent.children[i].style.left)+parseInt(parent.children[i].style.width))];
+        let currCenter = [(parseInt(parent.children[i].style.top)+(parseInt(parent.children[i].style.height)/2)) , (parseInt(parent.children[i].style.left)+(parseInt(parent.children[i].style.width)/2))];
 
         if(distance(platformCenter, currCenter)<=minDistance){
 
@@ -232,5 +247,5 @@ function checkPlatformDistances(parent, platform){
 function getRandomArbitrary(min, max) {
 
     return Math.random() * (max - min) + min;
-  }
+}
   

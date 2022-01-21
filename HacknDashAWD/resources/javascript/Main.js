@@ -1,6 +1,7 @@
 import { ChangeBG } from "./View.js";
 import { PlayerUpdate, RegisterEventListener, CheckGameStart, InitPlayer, CheckGameOver } from "./Character.js";
 import { InstantiatePlatforms, MovePlatforms } from "./Platform.js";
+import { Collect } from "./Collectable.js";
 
 
 let score = document.getElementById("score");
@@ -40,16 +41,13 @@ function update(){
     deltaTime = now - lastUpdate;
     lastUpdate = now;
     
-    ChangeBG();
-    PlayerUpdate();
+    
 
     if(gamestart){
 
         MovePlatforms();
 
         scorePoints += deltaTime;
-
-        score.innerHTML = "Score: "+scorePoints;
 
         if(CheckGameOver()){
 
@@ -61,6 +59,13 @@ function update(){
 
         gamestart = CheckGameStart();
     }
+
+    ChangeBG();
+    scorePoints += Collect();
+    PlayerUpdate();
+
+    score.innerHTML = "Score: "+scorePoints;
+    
 
 }
 

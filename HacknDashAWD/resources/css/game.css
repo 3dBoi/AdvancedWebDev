@@ -9,6 +9,7 @@ body {
 }
 
 #player {
+    z-index: 1;
     width: 100px;
     height: 100px;
     background-color: black;
@@ -18,6 +19,7 @@ body {
 }
 
 #tryAgainBtn {
+    z-index: 2;
     visibility: hidden;
     position: absolute;
     width: 5em;
@@ -35,9 +37,21 @@ body {
     color: green;
 }
 
+.collectable {
+    position: absolute;
+    z-index: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: chartreuse;
+    top: 50%;
+    left: 50%;
+}
+
 .platform {
     width: 300px;
     height: 30px;
     background-color: black;
     position: absolute;
+    z-index: 0;
 }
