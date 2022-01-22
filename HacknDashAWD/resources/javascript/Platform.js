@@ -1,6 +1,7 @@
-import { DeltaTime } from "./Main.js";
+import { DeltaTime, gamestart } from "./Main.js";
 import { velocity } from "./Character.js";
-import { SpawnCollectable , MoveCollectables} from "./Collectable.js";
+import { SpawnCollectable , MoveCollectables } from "./Collectable.js";
+import { intersection, distance, inBounds } from "./Game.js";
 
 
 
@@ -30,20 +31,20 @@ export function Collision(){
 
         let platformBounds = platforms[i].getBoundingClientRect();
 
-        let topEdgePlatform = [platformBounds.left , platformBounds.top , (platformBounds.left+platformBounds.width) , platformBounds.top];
-        let vectorEdge = [topEdgePlatform[2]-topEdgePlatform[0] , topEdgePlatform[3]-topEdgePlatform[1]];
+        let topEdgePlatformA = [platformBounds.left , platformBounds.top ,  , platformBounds.top];
+        let topEdgePlatformB = [(platformBounds.left+platformBounds.width) , platformBounds.top];
 
-        let intersectionA = intersection(bottomEdgePlayerA, topEdgePlatform, vectorEdge);
-        let intersectionB = intersection(bottomEdgePlayerB, topEdgePlatform, vectorEdge);
+        let intersectionA = intersection(topEdgePlatformA, topEdgePlatformB, bottomEdgePlayerA);
+        let intersectionB = intersection(topEdgePlatformA, topEdgePlatformB, bottomEdgePlayerB);
 
         let distanceA = distance(bottomEdgePlayerA, intersectionA);
         let distanceB = distance(bottomEdgePlayerB, intersectionB);
 
-        if(abovePlatform(platformBounds)&&distanceA<=collisionDistance&&inBounds(intersectionA, topEdgePlatform, vectorEdge)){
+        if(abovePlatform(platformBounds)&&distanceA<=collisionDistance&&inBounds(intersectionA, topEdgePlatformA, topEdgePlatformB)){
             
             collisionPlatformY = platformBounds.top;
             return true;
-        } else if(abovePlatform(platformBounds)&&distanceB<=collisionDistance&&inBounds(bottomEdgePlayerB, topEdgePlatform, vectorEdge)){
+        } else if(abovePlatform(platformBounds)&&distanceB<=collisionDistance&&inBounds(intersectionB, topEdgePlatformA, topEdgePlatformB)){
 
             collisionPlatformY = platformBounds.top;
             return true;
@@ -92,7 +93,7 @@ export function MovePlatforms(){
         let platformPosY = parseInt(platforms[i].style.top);
         platforms[i].style.top = platformPosY+platformVY*(DeltaTime()*0.001)+"px";
 
-        if((parseInt(platforms[i].style.top)+parseInt(platforms[i].style.height))>window.innerHeight){
+        if((parseInt(platforms[i].style.top)+parseInt(platforms[i].style.height))+5>window.innerHeight){
 
             destroyPlatform(platforms[i]);
 
@@ -108,6 +109,15 @@ export function MovePlatforms(){
                     parent.appendChild(newChild);
                 }
             }
+        } else if(platformPosY <= window.innerHeight/10&&gamestart) {
+
+            platforms[i].innerHTML = "Platform.init();"
+        } else if(platformPosY >= ((window.innerHeight/10)*9)&&gamestart) {
+
+            platforms[i].innerHTML = "Platform.destroy();"
+        } else if(gamestart){
+
+            platforms[i].innerHTML = "Platform.fall();"
         }
 
     }
@@ -131,61 +141,15 @@ function newPlatform(){
 
     let child = document.createElement("div");
     child.className = "platform";
-    child.style.width = getRandomArbitrary(150, 300)+"px";
+    child.style.width = getRandomArbitrary(180, 300)+"px";
     child.style.height = platformHeight+"px";
     child.style.left = getRandomArbitrary(0, (window.innerWidth-parseInt(child.style.width)))+"px";
+    child.innerHTML = "Platform.init();"
     return child;
 
 }
 
-function intersection(pointPlayer , edge, vectorEdge){
 
-    let orth = [vectorEdge[1], -vectorEdge[0]];
-
-    let detA = determinante((pointPlayer[0]-edge[0]) , orth[0] , (pointPlayer[1]-edge[1]) , orth[1]);
-    let detB = determinante(vectorEdge[0] , orth[0] , vectorEdge[1] , orth[1]);
-
-    let r = detA/detB;
-
-    let intersection = [edge[0]+r*vectorEdge[0] , edge[1]+r*vectorEdge[1]];
-
-    return intersection;
-
-}
-
-// distance of 2 Points
-function distance(p1, p2){
-
-    return Math.sqrt(Math.pow(p1[0]-p2[0], 2)+ Math.pow(p1[1]-p2[1], 2));
-}
-
-// Check if intersection is between points
-function inBounds(intersection, edge, vectorEdge){
-    
-    let tx,ty;
-
-    if(vectorEdge[0]!=0){
-
-        tx = (intersection[0] - edge[0]) / vectorEdge[0];
-    } else {
-
-        tx = 0;
-    }
-
-    if(vectorEdge[1]!=0){
-
-        ty = (intersection[1] - edge[1]) / vectorEdge[1];
-    } else {
-
-        ty = 0;
-    }
-
-    if(tx <= 1 && tx >= 0 && ty <= 1 && ty >= 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
 function abovePlatform(edgeBounds){
 
@@ -196,11 +160,6 @@ function abovePlatform(edgeBounds){
     return false;
 
 
-}
-
-function determinante(a11, a12, a21, a22){
-
-    return (a11*a22) - (a21*a12);
 }
 
 // Instantiates Platforms

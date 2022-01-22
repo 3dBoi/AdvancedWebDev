@@ -1,5 +1,6 @@
 import {velocity} from "./Character.js";
 import {DeltaTime} from "./Main.js";
+import { intersection, distance, inBounds } from "./Game.js";
 
 
 let parent = document.getElementById("collectables");
@@ -43,19 +44,19 @@ function collectableCollision(){
         let distanceLeft = Math.abs(distance(collectableCenter, intersectionLeft));
         let distanceRight = Math.abs(distance(collectableCenter, intersectionRight));
 
-        if(distanceBottom<=collisionDistance&&inBounds(intersectionBottom, bottomEdgePlayerA, bottomEdgePlayerB)){
+        if((distanceBottom-radius)<=collisionDistance&&inBounds(intersectionBottom, bottomEdgePlayerA, bottomEdgePlayerB)){
             
             destroyCollectable(collectables[i]);
             return true;
-        } else if(distanceTop<=collisionDistance&&inBounds(intersectionTop, topEdgePlayerA, topEdgePlayerB)){
+        } else if((distanceTop-radius)<=collisionDistance&&inBounds(intersectionTop, topEdgePlayerA, topEdgePlayerB)){
 
             destroyCollectable(collectables[i]);
             return true;
-        } else if(distanceLeft<=collisionDistance&&inBounds(intersectionLeft, leftEdgePlayerA, leftEdgePlayerB)){
+        } else if((distanceLeft-radius)<=collisionDistance&&inBounds(intersectionLeft, leftEdgePlayerA, leftEdgePlayerB)){
 
             destroyCollectable(collectables[i]);
             return true;
-        } else if(distanceRight<=collisionDistance&&inBounds(intersectionRight, rightEdgePlayerA, rightEdgePlayerB)){
+        } else if((distanceRight-radius)<=collisionDistance&&inBounds(intersectionRight, rightEdgePlayerA, rightEdgePlayerB)){
 
             destroyCollectable(collectables[i]);
             return true;
@@ -65,64 +66,6 @@ function collectableCollision(){
 
     return false;
 
-}
-
-// Intersectionpoint
-function intersection(edgePointA, edgePointB, point){
-
-    let vectorEdge = [edgePointB[0]-edgePointA[0] , edgePointB[1]-edgePointA[1]];
-
-    let orth = [vectorEdge[1], -vectorEdge[0]];
-
-    let detA = determinante((point[0]-edgePointA[0]) , orth[0] , (point[1]-edgePointA[1]) , orth[1]);
-    let detB = determinante(vectorEdge[0] , orth[0] , vectorEdge[1] , orth[1]);
-
-    let r = detA/detB;
-
-    let intersection = [edgePointA[0]+r*vectorEdge[0] , edgePointA[1]+r*vectorEdge[1]];
-
-    return intersection;
-
-}
-
-function determinante(a11, a12, a21, a22){
-
-    return (a11*a22) - (a21*a12);
-}
-
-function distance(p1, p2){
-
-    return (Math.sqrt(Math.pow(p1[0]-p2[0], 2)+ Math.pow(p1[1]-p2[1], 2)))-radius;
-}
-
-// In Bounds of Rectangle
-function inBounds(intersection, edgePointA, edgePointB){
-
-    let vectorEdge = [edgePointB[0]-edgePointA[0] , edgePointB[1]-edgePointA[1]];
-    
-    let tx,ty;
-
-    if(vectorEdge[0]!=0){
-
-        tx = (intersection[0] - edgePointA[0]) / vectorEdge[0];
-    } else {
-
-        tx = 0;
-    }
-
-    if(vectorEdge[1]!=0){
-
-        ty = (intersection[1] - edgePointA[1]) / vectorEdge[1];
-    } else {
-
-        ty = 0;
-    }
-
-    if(tx <= 1 && tx >= 0 && ty <= 1 && ty >= 0) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 function destroyCollectable(collectable){

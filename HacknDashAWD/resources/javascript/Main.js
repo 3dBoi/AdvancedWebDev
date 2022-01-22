@@ -7,7 +7,7 @@ import { Collect } from "./Collectable.js";
 let score = document.getElementById("score");
 let scorePoints = 0;
 let lastUpdate = Date.now();
-let gamestart = false;
+export let gamestart = false;
 let deltaTime;
 let tick;
 
@@ -60,7 +60,7 @@ function update(){
         gamestart = CheckGameStart();
     }
 
-    ChangeBG();
+    //ChangeBG();
     scorePoints += Collect();
     PlayerUpdate();
 
@@ -72,12 +72,11 @@ function update(){
 function gameOver(){
 
     clearInterval(tick);
-    document.getElementById("tryAgainBtn").style.visibility = "visible";
+    document.getElementById("gameover").style.visibility = "visible";
+    document.getElementById("finalscore").innerHTML = "Score: "+scorePoints;
 }
 
 function reloadGame(){
-
-    console.log("RELOAD");
     location.reload();
 }
 
