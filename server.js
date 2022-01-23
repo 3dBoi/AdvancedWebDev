@@ -59,7 +59,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 })
 
 //Game Route
-app.get('/game', (req, res) => {
+app.get('/game', checkAuthenticated, (req, res) => {
   res.render('game.ejs')
 })
 
