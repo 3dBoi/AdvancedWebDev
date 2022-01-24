@@ -18,6 +18,7 @@ let speedGround = 400;
 let speedAir = 100;
 let jumpheight = 1300;
 let onFloor = false;
+let gamescreen = document.getElementById("gamescreen");
 
 export let velocity;
 
