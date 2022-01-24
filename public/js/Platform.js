@@ -6,14 +6,14 @@ import { intersection, distance, inBounds } from "./Game.js";
 
 
 let collisionPlatformY;
-let minDistance = 300;
+let minDistance = 15;
 let startplatforms = 12;
-let platformHeight = 30;
+let platformHeight = 3;
 let minPlatforms = 8;
 let collisionDistance;
 let platforms;
 let player;
-let platformVY = 50;
+let platformVY = 6;
 
 
 export function Collision(){
@@ -25,7 +25,7 @@ export function Collision(){
     let bottomEdgePlayerA = [player.left , (player.top+player.height)];
     let bottomEdgePlayerB = [(player.left+player.width) , (player.top+player.height)];
 
-    collisionDistance = (velocity+platformVY)*0.1;
+    collisionDistance = (velocity+platformVY)/2;
 
     for(let i = 0; i<platforms.length; i++){
 
@@ -42,11 +42,11 @@ export function Collision(){
 
         if(abovePlatform(platformBounds)&&distanceA<=collisionDistance&&inBounds(intersectionA, topEdgePlatformA, topEdgePlatformB)){
             
-            collisionPlatformY = platformBounds.top;
+            collisionPlatformY = parseFloat(platforms[i].style.top);
             return true;
         } else if(abovePlatform(platformBounds)&&distanceB<=collisionDistance&&inBounds(intersectionB, topEdgePlatformA, topEdgePlatformB)){
 
-            collisionPlatformY = platformBounds.top;
+            collisionPlatformY = parseFloat(platforms[i].style.top);
             return true;
         }
 
@@ -68,7 +68,7 @@ export function YPosition(){
 
 export function MovePlatforms(){
 
-    platformVY += 0.1;
+    platformVY += 0.01;
 
     platforms = document.getElementsByClassName("platform");
 
@@ -76,7 +76,7 @@ export function MovePlatforms(){
 
         let parent = document.getElementById("platforms");
         let newChild = newPlatform();
-        newChild.style.top = 0+"px";
+        newChild.style.top = 0+"%";
 
         if(platforms.length>0){
             if(!checkPlatformDistances(parent, newChild)){
@@ -90,16 +90,16 @@ export function MovePlatforms(){
 
     for(let i = 0; i<platforms.length; i++){
 
-        let platformPosY = parseInt(platforms[i].style.top);
-        platforms[i].style.top = platformPosY+platformVY*(DeltaTime()*0.001)+"px";
+        let platformPosY = parseFloat(platforms[i].style.top);
+        platforms[i].style.top = platformPosY+platformVY*(DeltaTime()*0.001)+"%";
 
-        if((parseInt(platforms[i].style.top)+parseInt(platforms[i].style.height))+5>window.innerHeight){
+        if((parseFloat(platforms[i].style.top)+parseFloat(platforms[i].style.height))+5>100){
 
             destroyPlatform(platforms[i]);
 
             let parent = document.getElementById("platforms");
             let newChild = newPlatform();
-            newChild.style.top = 0+"px";
+            newChild.style.top = 0+"%";
 
             if(platforms.length>0){
                 if(!checkPlatformDistances(parent, newChild)){
@@ -109,15 +109,15 @@ export function MovePlatforms(){
                     parent.appendChild(newChild);
                 }
             }
-        } else if(platformPosY <= window.innerHeight/10&&gamestart) {
+        } else if(platformPosY <= 100/10&&gamestart) {
 
-            platforms[i].innerHTML = "Platform.init();"
-        } else if(platformPosY >= ((window.innerHeight/10)*9)&&gamestart) {
+            platforms[i].children[0].innerHTML = "Platform.init();";
+        } else if(platformPosY >= ((100/10)*9)&&gamestart) {
 
-            platforms[i].innerHTML = "Platform.destroy();"
+            platforms[i].children[0].innerHTML = "Platform.destroy();";
         } else if(gamestart){
 
-            platforms[i].innerHTML = "Platform.fall();"
+            platforms[i].children[0].innerHTML = "Platform.fall();";
         }
 
     }
@@ -127,7 +127,7 @@ export function MovePlatforms(){
 
 function platformCenter(platform){
 
-    return parseInt(platform.style.left)+(parseInt(platform.style.width)/2);
+    return parseFloat(platform.style.left)+(parseFloat(platform.style.width)/2);
 
 }
 
@@ -141,10 +141,13 @@ function newPlatform(){
 
     let child = document.createElement("div");
     child.className = "platform";
-    child.style.width = getRandomArbitrary(180, 300)+"px";
-    child.style.height = platformHeight+"px";
-    child.style.left = getRandomArbitrary(0, (window.innerWidth-parseInt(child.style.width)))+"px";
-    child.innerHTML = "Platform.init();"
+    child.style.width = getRandomArbitrary(9, 15)+"%";
+    child.style.height = platformHeight+"%";
+    child.style.left = getRandomArbitrary(0, (100-parseInt(child.style.width)))+"%";
+    let text = document.createElement("p");
+    text.className = "text";
+    text.innerHTML = "Platform.init();"
+    child.appendChild(text);
     return child;
 
 }
@@ -170,7 +173,7 @@ export function InstantiatePlatforms(){
     for(let i = 0; i<=startplatforms; i++){
 
         let child = newPlatform();
-        child.style.top = getRandomArbitrary(0, (window.innerHeight-parseInt(child.style.height)))+"px";
+        child.style.top = getRandomArbitrary(0, (100-parseInt(child.style.height)))+"%";
 
         if(i>0){
             if(!checkPlatformDistances(parent, child)){

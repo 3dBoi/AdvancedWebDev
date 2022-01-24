@@ -5,7 +5,7 @@ import { intersection, distance, inBounds } from "./Game.js";
 
 let parent = document.getElementById("collectables");
 let collisionDistance;
-let radius = 25;
+let radius = 1;
 let points = 10000;
 
 // Collision between Player and Collectable
@@ -27,7 +27,7 @@ function collectableCollision(){
     let rightEdgePlayerA = [(player.left+player.width) , player.top];
     let rightEdgePlayerB = [(player.left+player.width) , (player.top+player.height)];
 
-    collisionDistance = 10;
+    collisionDistance = 15;
 
     for(let i = 0; i<collectables.length; i++){
 
@@ -106,12 +106,10 @@ export function MoveCollectables(speed){
 
     for(let i = 0; i<collectables.length; i++){
 
-        let collectablePosY = parseInt(collectables[i].style.top);
-        collectables[i].style.top = collectablePosY+speed*(DeltaTime()*0.001)+"px";
+        let collectablePosY = parseFloat(collectables[i].style.top);
+        collectables[i].style.top = collectablePosY+speed*(DeltaTime()*0.001)+"%";
 
-        let collectableBounds = collectables[i].getBoundingClientRect();
-
-        if((collectableBounds.top+collectableBounds.height)>window.innerHeight){
+        if((parseFloat(collectables[i].style.top)+parseFloat(collectables[i].style.height))+5>100){
 
             destroyCollectable(collectables[i]);
         }
@@ -124,8 +122,10 @@ function newCollectable(center){
 
     let child = document.createElement("div");
     child.className = "collectable";
-    child.style.top = -80+"px";
-    child.style.left = center-radius+"px";
+    child.style.width = radius*2+"%";
+    child.style.height = (((radius*2/100)*window.innerWidth)/window.innerHeight)*100+"%";
+    child.style.top = -6+"%";
+    child.style.left = center-radius+"%";
     return child;
 
 }
