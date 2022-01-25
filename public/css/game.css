@@ -32,7 +32,6 @@ body {
 
 #player {
     z-index: 1;
-    background-color: black;
     position: absolute;
     left: 50%;
 }
@@ -105,7 +104,7 @@ body {
 
 .text {
     font-family: "AdvancedPixel";
-    font-size: 120%;
+    font-size: 4vh;
     color: green;
     font-weight: bold;
     padding-left: 2%;
