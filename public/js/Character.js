@@ -15,7 +15,7 @@ let holdLeft = false;
 let holdRight = false;
 
 // Worldinteraction
-let gravity = 250;
+let gravity = 300;
 let friction = 200;
 let speedGround = 30;
 let speedAir = 15;
@@ -158,10 +158,12 @@ function updatePosition(){
     ay = gravity;
 
     if(!holdLeft&&onGround&&vx<0){
-        ax = friction;
+        //ax = friction;
+        vx = 0;
     }
     else if(!holdRight&&onGround&&vx>0){
-        ax = -friction;
+        //ax = -friction;
+        vx = 0;
     }
     if(-5<=vx&&vx<=5){
         vx = 0;

@@ -20,7 +20,7 @@ function start(){
     InitPlayer();
     InstantiatePlatforms();
     RegisterEventListener();
-    setAnimator(30);
+    setAnimator(60);
 
     document.getElementById("tryAgainBtn").onclick = function(){reloadGame()};
     

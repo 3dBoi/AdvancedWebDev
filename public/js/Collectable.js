@@ -27,7 +27,7 @@ function collectableCollision(){
     let rightEdgePlayerA = [(player.left+player.width) , player.top];
     let rightEdgePlayerB = [(player.left+player.width) , (player.top+player.height)];
 
-    collisionDistance = 15;
+    collisionDistance = 30;
 
     for(let i = 0; i<collectables.length; i++){
 
