@@ -59,7 +59,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 })
 
 //Game Route
-app.get('/game', (req, res) => {
+app.get('/game', checkAuthenticated, (req, res) => {
   res.render('game.ejs')
 })
 
@@ -68,6 +68,10 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local',{
     failureRedirect: '/login',
     failureFlash: true
 }))
+
+app.post('/game', checkAuthenticated,  (req, res) =>{
+  res.redirect('/game')
+})
 
 app.post('/register', checkNotAuthenticated, async (req, res) => {
     try{

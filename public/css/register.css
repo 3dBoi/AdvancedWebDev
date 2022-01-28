@@ -1,4 +1,9 @@
 
+*{
+    margin: 0;
+    padding: 0;
+}
+
 section{
     position: absolute;
     height: 100vh;
@@ -73,6 +78,16 @@ section .row div:nth-child(2){
     }
 }
 
+section .row:nth-child(even) div{
+    animation: animate3 80s linear infinite;
+    animation-delay: -80s;
+}
+
+section .row:nth-child(even) div:nth-child(2){
+    animation: animate4 80s linear infinite;
+    animation-delay: -40s;
+}
+
 @keyframes animate3{
     0%
     {
@@ -95,15 +110,8 @@ section .row div:nth-child(2){
     }
 }
 
-
-section .row:nth-child(even) div{
-    animation: animate3 80s linear infinite;
-    animation-delay: -80s;
-}
-
-section .row:nth-child(even) div:nth-child(2){
-    animation: animate4 80s linear infinite;
-    animation-delay: -40s;
+#wrapper{
+    position: relative;
 }
 
 body{
@@ -111,21 +119,28 @@ body{
     background: #111;
 }
 
-#wrapper{
-    position: relative;
-}
-
-
 .center{
     position: relative;
     left: 50%;
     width: 400px;
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, 85%);
     background: rgb(231, 231, 231);
     border-radius: 10px;
     z-index: 300;
     overflow: hidden;
-    padding-bottom: 1%;
+}
+
+.errorCode{
+    text-align: center;
+    color: red;
+    font-size: 75%;
+    padding-top: 5%;
+}
+
+.center h1{
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+    border-bottom: 1px solid silver;
 }
 
 .center form{
@@ -133,10 +148,52 @@ body{
     box-sizing: border-box;
 }
 
-.center h1{
-    text-align: center;
-    padding: 10px 10px 10px 10px;
-    border-bottom: 1px solid silver;
+form .txt_field{
+    position: relative;
+    border-bottom: 2px solid #adadad;
+    margin: 20px 0;
+}
+
+.txt_field input{
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.txt_field label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #adadad;
+    transform: translateY(-50%);
+    font-size: 15px;
+    pointer-events: none;
+    transition: .3s;
+}
+
+.txt_field span::before{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #33ad93;
+    transition: .3s;
+}
+
+.txt_field input:focus ~ label,
+.txt_field input:valid ~ label{
+    top: -5px;
+    color: #33ad93;
+}
+
+.txt_field input:focus ~ span::before,
+.txt_field input:valid ~ span::before{
+    width: 100%;
 }
 
 button{
@@ -157,7 +214,7 @@ button:hover{
     transition: .3s;
 }
 
-.signout{
+.signup{
     text-align: center;
     margin-top: 10px;
     padding-bottom: 10px;
@@ -165,12 +222,14 @@ button:hover{
     color: #666666;
 }
 
-.signout a{
+.signup a{
     color:#33ad93;
     text-decoration: none;
 }
 
-.signout a:hover{
+.signup a:hover{
     color:#33ad93;
     text-decoration: underline;
 }
+
+
