@@ -69,6 +69,10 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local',{
     failureFlash: true
 }))
 
+app.post('/game', checkAuthenticated,  (req, res) =>{
+  res.redirect('/game')
+})
+
 app.post('/register', checkNotAuthenticated, async (req, res) => {
     try{
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
