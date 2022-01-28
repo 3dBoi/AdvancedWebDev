@@ -3,6 +3,7 @@ import { ChangeBG } from "./View.js";
 import { PlayerUpdate, RegisterEventListener, CheckGameStart, InitPlayer, CheckGameOver } from "./Character.js";
 import { InstantiatePlatforms, MovePlatforms } from "./Platform.js";
 import { Collect } from "./Collectable.js";
+import { Fight } from "./Enemy.js";
 
 
 let score = document.getElementById("score");
@@ -50,7 +51,7 @@ function update(){
 
         scorePoints += deltaTime;
 
-        if(CheckGameOver()){
+        if(CheckGameOver()||Fight()){
 
             gameOver();
         }

@@ -46,6 +46,12 @@ body {
     font-family:"AdvancedPixel";
     text-align: center;
     font-weight: bold;
+    background-color: #777;
+    border-radius: 5%;
+    border-color: black;
+    border-width: 1%;
+    border-style: solid;
+    padding: 2%;
 }
 
 #gameover p {
@@ -90,6 +96,13 @@ body {
     z-index: 0;
     border-radius: 50%;
     background-color: chartreuse;
+}
+
+.enemy {
+    position: absolute;
+    z-index: 0;
+    border-radius: 50%;
+    background-color: rgb(230, 29, 29);
 }
 
 .platform {

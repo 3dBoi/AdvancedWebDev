@@ -1,6 +1,7 @@
 import { DeltaTime, gamestart } from "./Main.js";
 import { velocity } from "./Character.js";
 import { SpawnCollectable , MoveCollectables } from "./Collectable.js";
+import { SpawnEnemy , MoveEnemies } from "./Enemy.js";
 import { intersection, distance, inBounds } from "./Game.js";
 
 
@@ -81,7 +82,9 @@ export function MovePlatforms(){
         if(platforms.length>0){
             if(!checkPlatformDistances(parent, newChild)){
 
-                SpawnCollectable(platformCenter(newChild));
+                if(!SpawnCollectable(platformCenter(newChild))){
+                    SpawnEnemy(platformCenter(newChild));
+                }
 
                 parent.appendChild(newChild);
             }
@@ -104,7 +107,9 @@ export function MovePlatforms(){
             if(platforms.length>0){
                 if(!checkPlatformDistances(parent, newChild)){
 
-                    SpawnCollectable(platformCenter(newChild));
+                    if(!SpawnCollectable(platformCenter(newChild))){
+                        SpawnEnemy(platformCenter(newChild));
+                    }
 
                     parent.appendChild(newChild);
                 }
@@ -123,6 +128,7 @@ export function MovePlatforms(){
     }
 
     MoveCollectables(platformVY);
+    MoveEnemies(platformVY);
 }
 
 function platformCenter(platform){

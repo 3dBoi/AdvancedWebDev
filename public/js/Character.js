@@ -31,10 +31,10 @@ let animationStarted = false;
 let animationIndex = 0;
 
 // Animation Arrays
-let leftAnimation = ["../public/images/left1.png" , "../public/images/left2.png"];
-let rightAnimation = ["../public/images/right1.png" , "../public/images/right2.png"];
-let jumpAnimation = ["../public/images/jump.png"];
-let defaultAnimation = ["../public/images/default.png"];
+let leftAnimation = ["../public/images/animation/right1.png" , "../public/images/animation/right2.png" , "../public/images/animation/right3.png" , "../public/images/animation/right4.png" , "../public/images/animation/right5.png"];
+let rightAnimation = ["../public/images/animation/right1.png" , "../public/images/animation/right2.png" , "../public/images/animation/right3.png" , "../public/images/animation/right4.png" , "../public/images/animation/right5.png"];
+let jumpAnimation = ["../public/images/animation/jump1.png" , "../public/images/animation/jump2.png"];
+let defaultAnimation = ["../public/images/animation/default.png"];
 
 export let velocity;
 
@@ -62,7 +62,7 @@ export function InitPlayer(){
     player.src = "../public/images/default.png";
     player.alt = "player";
     player.id = "player";
-    player.style.width = 5+"%";
+    player.style.width = 3.8+"%";
     player.style.height = (((7/100)*window.innerWidth)/window.innerHeight)*100+"%";
     player.style.top = 100-(parseFloat(player.style.height))+"%";
     player.style.left = 50+"%";
@@ -280,24 +280,29 @@ function Animation(){
 
         case 1:
 
-            if(animationDelta>500){
+            
+            if(animationDelta>50){
                 NextKeyframe(leftAnimation)
                 player.src = leftAnimation[animationIndex];
                 animationStart = Date.now();
             } else {
                 player.src = leftAnimation[animationIndex];
             }
+
+            player.style.transform = "scaleX(-1)";
             break;
 
         case 2:
 
-            if(animationDelta>500){
+            if(animationDelta>50){
                 NextKeyframe(rightAnimation)
                 player.src = rightAnimation[animationIndex];
                 animationStart = Date.now();
             } else {
                 player.src = rightAnimation[animationIndex];
             }
+
+            player.style.transform = "scaleX(1)";
             break;
 
         case 3:

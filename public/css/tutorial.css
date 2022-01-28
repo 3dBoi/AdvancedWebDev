@@ -1,0 +1,25 @@
+@font-face {
+    font-family: "AdvancedPixel";
+    src: url("../fonts/advanced_pixel-7.ttf");
+}
+
+#tutorial {
+    position: absolute;
+    left: calc(50% - (5em / 2));
+    top: calc(30% - (3em / 2));
+    font-size: 5em;
+    font-family:"AdvancedPixel";
+    text-align: center;
+    font-weight: bold;
+    background-color: #777;
+    border-radius: 5%;
+    border-color: black;
+    border-width: 1%;
+    border-style: solid;
+    padding: 2%;
+}
+
+p {
+    padding-left: 0.5em;
+    color: green;
+}

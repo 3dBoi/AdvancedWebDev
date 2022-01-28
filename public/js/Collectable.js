@@ -94,7 +94,11 @@ export function SpawnCollectable(center){
         let newChild = newCollectable(center);
 
         parent.appendChild(newChild);
+
+        return true;
     }
+
+    return false;
 
 
 }
