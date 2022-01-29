@@ -54,21 +54,6 @@ body {
     padding: 2%;
 }
 
-#tryAgainBtn {
-    z-index: 2;
-    visibility: hidden;
-    position: absolute;
-    width: 5em;
-    height: 3em;
-    left: calc(50% - (5em / 2));
-    top: calc(50% - (3em / 2));
-    background-color: Transparent;
-    outline: none;
-    border: none;
-    font-size: 5em;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-
 #tryAgainBtn:hover {
     color: green;
 }
