@@ -1,5 +1,4 @@
 
-import { ChangeBG } from "./View.js";
 import { PlayerUpdate, RegisterEventListener, CheckGameStart, InitPlayer, CheckGameOver } from "./Character.js";
 import { InstantiatePlatforms, MovePlatforms } from "./Platform.js";
 import { Collect } from "./Collectable.js";
@@ -62,7 +61,6 @@ function update(){
         gamestart = CheckGameStart();
     }
 
-    //ChangeBG();
     scorePoints += Collect();
     PlayerUpdate();
 

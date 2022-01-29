@@ -307,7 +307,14 @@ function Animation(){
 
         case 3:
 
-            player.src = jumpAnimation[animationIndex];
+            if(animationDelta>50){
+                NextKeyframe(jumpAnimation)
+                player.src = jumpAnimation[animationIndex];
+                animationStart = Date.now();
+            } else {
+                player.src = jumpAnimation[animationIndex];
+            }
+
             break;
 
         default:
