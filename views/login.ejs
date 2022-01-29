@@ -4,9 +4,9 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Hack'n'Dash</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/login.css">
   </head>
-
   <body>
     <div class = "wrapper">
     <section>
@@ -1075,22 +1075,31 @@
 </div>
 </div>
     </section>
-
-  <body>
-<div class="center">
-<h1>Willkommen <%= name %>!</h1>
-<form action="/game" method="POST">
-  <div class="game">
-  <button type="submit">Spielen</button>
-</form>
-<form action="/logout?_method=DELETE" method="POST">
-  <div class="signout">
-  <button type="submit">Ausloggen</button>
-</div>
-</form>
-</a>
-</div>
-</body>
+  <div class="center">
+  <h1>Login</h1>
+  <div class ="errorCode">
+<% if(messages.error) { %>
+   <%= messages.error %>
+   <% } %>
+  </div>
+<form action="/login" method="POST">
+    <div class ="txt_field">
+        <input type="email" id="email" name="email" required>
+        <span></span>
+        <label for="email">Email</label>
     </div>
 
+    <div class ="txt_field">
+        <input type="password" id="password" name="password" required>
+        <span></span>
+        <label for="password">Passwort</label>
+    </div>
+    <button type="submit">Login</button>
+</form>
+<div class ="signup">
+Noch kein Mitglied? <a href="/register">Registrieren</a>
+</div>
+</div>
+</div>
+</body>
 </html>

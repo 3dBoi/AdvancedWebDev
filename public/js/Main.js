@@ -83,4 +83,3 @@ function reloadGame(){
 export function DeltaTime(){
     return deltaTime;
 }
-

@@ -4,11 +4,9 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Hack'n'Dash</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/register.css">
   </head>
-
-  <body>
-    <div class = "wrapper">
+  <div class = "wrapper">
     <section>
       <div class="row">
         <div>
@@ -1075,22 +1073,31 @@
 </div>
 </div>
     </section>
-
   <body>
 <div class="center">
-<h1>Willkommen <%= name %>!</h1>
-<form action="/game" method="POST">
-  <div class="game">
-  <button type="submit">Spielen</button>
-</form>
-<form action="/logout?_method=DELETE" method="POST">
-  <div class="signout">
-  <button type="submit">Ausloggen</button>
-</div>
-</form>
-</a>
-</div>
-</body>
+<h1>Register</h1>
+<form action="/register" method="POST">
+    <div class ="txt_field">
+      <input type="text" id="name" name="name" required>
+      <span></span>
+      <label for="name">Name</label>
     </div>
-
+    <div class ="txt_field">
+      <input type="email" id="email" name="email" required>
+      <label for="email">Email</label>
+      <span></span>
+    </div>
+    <div class ="txt_field">
+      <input type="password" id="password" name="password" required>
+      <label for="password">Password</label>
+      <span></span>
+    </div>
+    <button type="submit">Register</button>
+  </form>
+  <div class ="signup">
+  Bereits Mitglied? <a href="/login">Login</a>
+</div>
+  </body>
+  </div>
+  </div>
 </html>
