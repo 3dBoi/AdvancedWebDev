@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 require ("dotenv").config();
 
+
 var con = mysql.createConnection({
   host: "munir.enteentelos.com",
   database: "database",
@@ -13,7 +14,4 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
-
-con.query ("SELECT * FROM userlist",(error, results, fields) => {
-console.log(results);
-});
+module.exports.db = con;

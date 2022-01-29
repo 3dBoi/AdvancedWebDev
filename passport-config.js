@@ -7,17 +7,17 @@ function initialize(passport, getUserByEmail, getUserById){
     const authenticateUser = async (email, password, done) => {
         //if user is not attached to email
         const user = getUserByEmail(email)
-        if(user==null){
+        if(user == null){
             return done(null, false, {message: 'Fehler: Diese E-Mail ist keinem User zugeordnet.'})
         }
 
         //check password
         try {
             //if password is correct
-            if(await bcrypt.compare(password, user.password)){
+            if (await bcrypt.compare(password, user.password)) {
             return done(null, user)
                 //if the password is wrong
-            } else{
+            } else {
                 return done(null, false, {message: 'Fehler: Das Passwort ist falsch.'})
             }
         } catch (e) {

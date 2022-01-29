@@ -31,10 +31,10 @@ let animationStarted = false;
 let animationIndex = 0;
 
 // Animation Arrays
-let leftAnimation = ["../public/images/animation/right1.png" , "../public/images/animation/right2.png" , "../public/images/animation/right3.png" , "../public/images/animation/right4.png" , "../public/images/animation/right5.png"];
-let rightAnimation = ["../public/images/animation/right1.png" , "../public/images/animation/right2.png" , "../public/images/animation/right3.png" , "../public/images/animation/right4.png" , "../public/images/animation/right5.png"];
-let jumpAnimation = ["../public/images/animation/jump1.png" , "../public/images/animation/jump2.png"];
-let defaultAnimation = ["../public/images/animation/default.png"];
+let leftAnimation = ["images/animation/right1.png" , "images/animation/right2.png" , "images/animation/right3.png" , "images/animation/right4.png" , "images/animation/right5.png"];
+let rightAnimation = ["images/animation/right1.png" , "images/animation/right2.png" , "images/animation/right3.png" , "images/animation/right4.png" , "images/animation/right5.png"];
+let jumpAnimation = ["images/animation/jump1.png" , "images/animation/jump2.png"];
+let defaultAnimation = ["images/animation/default.png"];
 
 export let velocity;
 
@@ -59,7 +59,7 @@ export function InitPlayer(){
 
     let gamescreen = document.getElementById("gamescreen");
     player = document.createElement("img");
-    player.src = "../public/images/default.png";
+    player.src = "images/default.png";
     player.alt = "player";
     player.id = "player";
     player.style.width = 3.8+"%";
