@@ -75,8 +75,9 @@ app.post('/login', checkNotAuthenticated, async (req, res) => {//passport.authen
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
-      db.query('SELECT email FROM userlist WHERE email = (reqbodyemail) && password = (hashedPassword) VALUES(?,?))', [req.body.email, hashedPassword ]);
-      console.log(db.query('SELECT email FROM userlist WHERE email = (reqbodyemail) && password = (hashedPassword) VALUES(?,?))', [req.body.email, hashedPassword ]));
+      db.query('SELECT id FROM userlist WHERE email = ? AND password = ?', [req.body.email, hashedPassword ]);
+
+      console.log(db.query('SELECT id FROM userlist WHERE email = ? AND password = ?', [req.body.email, hashedPassword ]));
 
     } catch (error) {
       res.redirect('/login');
