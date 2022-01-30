@@ -15,7 +15,6 @@ const getUserByEmail = (async (email) => {
     try {
         const response = await runQuery('SELECT * FROM userlist WHERE email = ?', [email]);
         const row = response.result[0];
-        console.log(row);
         if (row) {
             return userFactory(row.id, row.email, row.username, row.password);
         } else {
@@ -30,7 +29,6 @@ const getUserById = (async (id) => {
     try {
         const response = await runQuery('SELECT * FROM userlist WHERE id = ?', [id]);
         const row = response.result[0];
-        console.log(row);
         if (row) {
             return userFactory(row.id, row.email, row.username, row.password);
         } else {
@@ -45,7 +43,7 @@ function initialize(passport){
     //Checks login variables
     const authenticateUser = async (email, password, done) => {
         //if user is not attached to email
-        const user = getUserByEmail(email);
+        const user = await getUserByEmail(email);
         if (user == null) {
             return done(null, false, {message: 'Fehler: Diese E-Mail ist keinem User zugeordnet.'});
         }
@@ -66,8 +64,8 @@ function initialize(passport){
 
     passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.serializeUser((user, done) => done(null, user.id))
-    passport.deserializeUser((id, done) => {
-        return done(null, getUserById(id));
+    passport.deserializeUser(async (id, done) => {
+        return done(null, await getUserById(id));
     })
 }
 

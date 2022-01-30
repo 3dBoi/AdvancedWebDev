@@ -55,23 +55,23 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 
 //Game Route
 app.get('/game', (req, res) => {
-  res.render('game.ejs');
+    res.render('game.ejs');
 });
 
-app.post('/login', checkNotAuthenticated, async (req, res) => passport.authenticate('local', {
-    successRedirect: '/game',
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
-}));
+}))
 
 app.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         // Check for existence
         const existsQuery = await database.runQuery('SELECT * FROM userlist WHERE email = ?', [req.body.email]);
-        if (existsQuery.result.length) {
-          runQuery('INSERT INTO userlist (email, username, password) VALUES (?, ?, ?)', [req.body.email, req.body.name, hashedPassword]);
-          res.redirect('/');
+        if (!existsQuery.result.length) {
+            database.runQuery('INSERT INTO userlist (email, username, password) VALUES (?, ?, ?)', [req.body.email, req.body.name, hashedPassword]);
+            res.redirect('/');
         }
     } catch (e) {
         res.redirect('/register');
@@ -82,38 +82,44 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
 app.delete('/logout', (req, res) => {
     req.logOut();
     res.redirect('/login');
-  })
+});
+
+app.get('/highscore', async (req, res) => {
+    const leaderboard = await createLeaderBoard();
+    res.render('highscore.ejs', {
+        entries: leaderboard
+    });
+});
 
 //check ob User access zur Seite hat
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-      return next();
+        return next();
     }
-  
     res.redirect('/login');
-  }
+}
 
 //check ob User keinen access hat (bereits eingeloggt bspsw)
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-      return res.redirect('/');
+        return res.redirect('/');
     }
     next();
-  }
+}
 
 //fetch stats
-function fetchStats(req){
-var stats = [];
-// stats = db.query('SELECT * FROM stats WHERE userID = ? ', [req]);
-return stats;
+function fetchStats(req) {
+    var stats = [];
+    // stats = db.query('SELECT * FROM stats WHERE userID = ? ', [req]);
+    return stats;
 }
 
 //create leaderBoard
-function createLeaderBoard() {
-var leaderBoard = [];
-let leaderBoardConstructor0 = [];
-let leaderBoardConstructor1 = [];
-let leaderBoardConstructor2 = [];
+async function createLeaderBoard() {
+    var leaderBoard = [];
+    let leaderBoardConstructor0 = [];
+    let leaderBoardConstructor1 = [];
+    let leaderBoardConstructor2 = [];
 
 //leaderBoardConstructor0= db.query('SELECT userID,gamesplayed,personalBestScore0,personalBestTime0 FROM stats ORDER BY personalBestScore0 desc');
 
@@ -121,26 +127,30 @@ let leaderBoardConstructor2 = [];
 
 //leaderBoardConstructor2= db.query('SELECT userID,gamesplayed,personalBestScore2,personalBestTime2 FROM stats ORDER BY personalBestScore2 desc');
 
- leaderBoard = database.db.query('SELECT * FROM stats ORDER BY score desc');
-
- return leaderBoard;
+    leaderboardQuery = await database.runQuery('SELECT username, score, time FROM stats JOIN userlist ON stats.userID = userlist.id ORDER BY score desc LIMIT 10');
+    leaderboardQuery.result.forEach((entry) => {
+        leaderBoard.append({
+            user: entry.username,
+            score: entry.score,
+            time: entry.time
+        });
+    });
+    return leaderBoard;
 }
 
 
 //gameOverDBwrite
 function deathWrite(id, Score, time) {
-  gamesplayed = [];
-  let gamesplayed = database.db.query('SELECT gamesplayed FROM stats WHERE userID = ? ORDER BY gamesplayed desc',[id]);
+    gamesplayed = [];
+    let gamesplayed = database.db.query('SELECT gamesplayed FROM stats WHERE userID = ? ORDER BY gamesplayed desc', [id]);
 
-  if(gamesplayed.length==0){
-    gamesplayed[0] = 1;
-  }else{
-    gamesplayed[0] +=1; 
-  }
-  
-  database.db.query('INSERT INTO stats (userID, gamesplayed, score, time) VALUES (?, ?, ?, ?)', [id, Score, time, gamesplayed[0]]);
-
+    if (gamesplayed.length==0) {
+        gamesplayed[0] = 1;
+    } else {
+        gamesplayed[0] +=1; 
+    }
+    
+    database.db.query('INSERT INTO stats (userID, gamesplayed, score, time) VALUES (?, ?, ?, ?)', [id, Score, time, gamesplayed[0]]);
 }
-
 
 app.listen(3000);
