@@ -85,16 +85,6 @@ body {
     color: green;
 }
 
-/*#console {
-    width: calc(100% - 0.6em);
-    position: absolute;
-    bottom: 0px;
-    background-color: black;
-    border-width: 0.3em;
-    border-color: white;
-    border-style: solid;
-}*/
-
 .collectable {
     position: absolute;
     z-index: 0;
@@ -113,9 +103,6 @@ body {
     background-color: black;
     position: absolute;
     z-index: 0;
-    /*border-width: 0.3em;
-    border-color: white;
-    border-style: solid;*/  
 }
 
 .text {
