@@ -3,7 +3,6 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 const database = require ('./database');
-const runQuery = require('./database');
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
@@ -59,26 +58,22 @@ app.get('/game', (req, res) => {
   res.render('game.ejs');
 });
 
-app.post('/login', checkNotAuthenticated, async (req, res) => {//passport.authenticate('local',{
-    try {
-      const response = await database.runQuery('SELECT id FROM userlist WHERE email = ?', [req.body.email]);
-      console.log(response.result);
-    } catch (error) {
-      res.redirect('/login');
-    }
-
-    successRedirect: '/';
-    //failureRedirect: '/login',
-   // failureFlash: true
-});
+app.post('/login', checkNotAuthenticated, async (req, res) => passport.authenticate('local', {
+    successRedirect: '/game',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
 
 app.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        // TODO: Check for existance
-        await runQuery('INSERT INTO userlist (email, username, password) VALUES (?, ?, ?)', [req.body.email, req.body.name, hashedPassword]);
-        res.redirect('/');
-    } catch {
+        // Check for existence
+        const existsQuery = await database.runQuery('SELECT * FROM userlist WHERE email = ?', [req.body.email]);
+        if (existsQuery.result.length) {
+          runQuery('INSERT INTO userlist (email, username, password) VALUES (?, ?, ?)', [req.body.email, req.body.name, hashedPassword]);
+          res.redirect('/');
+        }
+    } catch (e) {
         res.redirect('/register');
     }
 })
@@ -109,7 +104,7 @@ function checkNotAuthenticated(req, res, next) {
 //fetch stats
 function fetchStats(req){
 var stats = [];
-stats = db.query('SELECT * FROM stats WHERE userID = ? ', [req]);
+// stats = db.query('SELECT * FROM stats WHERE userID = ? ', [req]);
 return stats;
 }
 
@@ -120,20 +115,32 @@ let leaderBoardConstructor0 = [];
 let leaderBoardConstructor1 = [];
 let leaderBoardConstructor2 = [];
 
-leaderBoardConstructor0= db.query('SELECT userID,gamesplayed,personalBestScore0,personalBestTime0 FROM stats ORDER BY personalBestScore0 desc');
+//leaderBoardConstructor0= db.query('SELECT userID,gamesplayed,personalBestScore0,personalBestTime0 FROM stats ORDER BY personalBestScore0 desc');
 
-leaderBoardConstructor1= db.query('SELECT userID,gamesplayed,personalBestScore1,personalBestTime1 FROM stats ORDER BY personalBestScore1 desc');
+//leaderBoardConstructor1= db.query('SELECT userID,gamesplayed,personalBestScore1,personalBestTime1 FROM stats ORDER BY personalBestScore1 desc');
 
-leaderBoardConstructor2= db.query('SELECT userID,gamesplayed,personalBestScore2,personalBestTime2 FROM stats ORDER BY personalBestScore2 desc');
+//leaderBoardConstructor2= db.query('SELECT userID,gamesplayed,personalBestScore2,personalBestTime2 FROM stats ORDER BY personalBestScore2 desc');
 
- //leaderBoard[];
+ leaderBoard = database.db.query('SELECT * FROM stats ORDER BY score desc');
 
  return leaderBoard;
 }
 
 
 //gameOverDBwrite
-function deathWrite(id, Score, time)
-db.query('UPDATE')
+function deathWrite(id, Score, time) {
+  gamesplayed = [];
+  let gamesplayed = database.db.query('SELECT gamesplayed FROM stats WHERE userID = ? ORDER BY gamesplayed desc',[id]);
+
+  if(gamesplayed.length==0){
+    gamesplayed[0] = 1;
+  }else{
+    gamesplayed[0] +=1; 
+  }
+  
+  database.db.query('INSERT INTO stats (userID, gamesplayed, score, time) VALUES (?, ?, ?, ?)', [id, Score, time, gamesplayed[0]]);
+
+}
+
 
 app.listen(3000);
