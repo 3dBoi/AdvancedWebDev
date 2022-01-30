@@ -40,7 +40,7 @@ app.use('images', express.static(__dirname + 'public/images'));
 
 //displayt index.ejs 
 app.get('/', checkAuthenticated, (req, res) => {
-    res.render('index.ejs', {name: req.user.name});
+    res.render('index.ejs', {name: req.user.username});
 });
 
 //Login Route
