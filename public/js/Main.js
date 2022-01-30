@@ -11,6 +11,7 @@ let lastUpdate = Date.now();
 export let gamestart = false;
 let deltaTime;
 let tick;
+let elapsedTime = 0;
 
 
 window.onload = start();
@@ -49,6 +50,7 @@ function update(){
         MovePlatforms();
 
         scorePoints += deltaTime;
+        elapsedTime += deltaTime;
 
         if(CheckGameOver()||Fight()){
 
@@ -70,10 +72,21 @@ function update(){
 }
 
 function gameOver(){
-
     clearInterval(tick);
     document.getElementById("gameover").style.visibility = "visible";
-    document.getElementById("finalscore").innerHTML = "Score: "+scorePoints;
+    document.getElementById("finalscore").innerHTML = "Score: " + scorePoints;
+
+    const data = new URLSearchParams();
+    data.append('score', scorePoints);
+    data.append('time', elapsedTime);
+    fetch('/profile', {
+        method: 'POST',
+        body: data
+    }).then(() => {
+        document.getElementById("feedback").innerHTML = "Status: synced with server";
+    }).catch((reason) => {
+        document.getElementById("feedback").innerHTML = "Status: failed: " + reason;
+    });
 }
 
 function reloadGame(){

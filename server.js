@@ -84,11 +84,43 @@ app.delete('/logout', (req, res) => {
     res.redirect('/login');
 });
 
+// Highscore page
 app.get('/highscore', async (req, res) => {
     const leaderboard = await createLeaderBoard();
     res.render('highscore.ejs', {
         entries: leaderboard
     });
+});
+
+// Profile page
+app.get('/profile', checkAuthenticated, async (req, res) => {
+    const stats = await fetchStats(req.user.id); // < id should exist, since the user has to be authenticated to be here
+    const gamesplayedQuery = await database.runQuery('SELECT MAX(gamesplayed) AS gamesplayed FROM stats WHERE userID = ? LIMIT 1', [req.user.id]);
+    var gamesplayed = 0;
+    if (gamesplayedQuery.result.length && gamesplayedQuery.result[0].gamesplayed != null) {
+        gamesplayed = gamesplayedQuery.result[0].gamesplayed;
+    }
+    res.render('profile.ejs', {
+        entries: stats,
+        gamesplayed: gamesplayed
+    });
+});
+
+app.post('/profile', checkAuthenticated, async (req, res) => {
+    if (!req.body.score || !req.body.time) {
+        res.status(400).send('Malformed request');
+        return;
+    }
+
+    const gamesplayedQuery = await database.runQuery('SELECT MAX(gamesplayed) AS gamesplayed FROM stats WHERE userID = ? LIMIT 1', [req.user.id]);
+    var gamesplayed = 0;
+    if (gamesplayedQuery.result.length && gamesplayedQuery.result[0].gamesplayed != null) {
+        gamesplayed = gamesplayedQuery.result[0].gamesplayed;
+    }
+    // Insert this game
+    await database.runQuery('INSERT INTO stats (userID, score, time, gamesplayed) VALUES (?, ?, ?, ?)', [req.user.id, req.body.score, req.body.time, gamesplayed]);
+    // increase games played
+    database.runQuery('UPDATE stats SET gamesplayed = gamesplayed + 1 WHERE userID = ?', [req.user.id]);
 });
 
 //check ob User access zur Seite hat
@@ -108,13 +140,12 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 //fetch stats
-async function fetchStats(req) {
+async function fetchStats(userID) {
     var stats = [];
-     db.query('SELECT * FROM stats WHERE userID = ? ORDER BY gamesplayed desc LIMIT 1', [req]);
-    var statsQuery = await database.runQuery('SELECT username, score FROM stats JOIN userlist ON stats. WHERE userID = ? userID = userlist.id ORDER BY score desc LIMIT 3', [req]);
-    leaderboardQuery.result.forEach((entry) => {
-        leaderBoard.push({
-            gamesplayed: entry.gamesplayed,
+
+    const statsQuery = await database.runQuery('SELECT username, score, time FROM stats JOIN userlist ON stats.userID = userlist.id WHERE userID = ? ORDER BY score desc LIMIT 3', [userID]);
+    statsQuery.result.forEach((entry) => {
+        stats.push({
             score: entry.score,
             time: entry.time
         });
@@ -126,15 +157,6 @@ async function fetchStats(req) {
 //create leaderBoard
 async function createLeaderBoard() {
     var leaderBoard = [];
-    let leaderBoardConstructor0 = [];
-    let leaderBoardConstructor1 = [];
-    let leaderBoardConstructor2 = [];
-
-//leaderBoardConstructor0= db.query('SELECT userID,gamesplayed,personalBestScore0,personalBestTime0 FROM stats ORDER BY personalBestScore0 desc');
-
-//leaderBoardConstructor1= db.query('SELECT userID,gamesplayed,personalBestScore1,personalBestTime1 FROM stats ORDER BY personalBestScore1 desc');
-
-//leaderBoardConstructor2= db.query('SELECT userID,gamesplayed,personalBestScore2,personalBestTime2 FROM stats ORDER BY personalBestScore2 desc');
 
     leaderboardQuery = await database.runQuery('SELECT username, score, time FROM stats JOIN userlist ON stats.userID = userlist.id ORDER BY score desc LIMIT 10');
     leaderboardQuery.result.forEach((entry) => {
