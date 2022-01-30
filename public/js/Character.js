@@ -124,6 +124,53 @@ export function RegisterEventListener(){
                 vx = speedAir;
             }
             
+        } else if (event.code === "KeyW"){
+
+            if(onGround){
+
+                if(!animationStarted){
+                    animationStart = Date.now();
+                    animationStarted = true;
+                }
+
+                onGround = false;
+                vy = -jumpheight;
+            }
+            
+        } else if (event.code === "KeyA"){
+
+            holdLeft = true;
+
+            if(onGround){
+
+                if(!animationStarted){
+                    animationStart = Date.now();
+                    animationStarted = true;
+                }
+
+                vx = -speedGround;
+                ax = 0;
+            }else{
+                vx = -speedAir;
+            }
+            
+        } else if (event.code === "KeyD"){
+
+            holdRight = true;
+
+            if(onGround){
+
+                if(!animationStarted){
+                    animationStart = Date.now();
+                    animationStarted = true;
+                }
+
+                vx = speedGround;
+                ax = 0;
+            }else{
+                vx = speedAir;
+            }
+            
         }
 
         event.preventDefault();
@@ -139,6 +186,17 @@ export function RegisterEventListener(){
             holdRight = false;
             
         } else if (event.code === "ArrowLeft"){
+
+            animationStarted = false;
+            animationIndex = 0;
+            holdLeft = false;
+        } else if (event.code === "KeyD"){
+
+            animationStarted = false;
+            animationIndex = 0;
+            holdRight = false;
+            
+        } else if (event.code === "KeyA"){
 
             animationStarted = false;
             animationIndex = 0;
