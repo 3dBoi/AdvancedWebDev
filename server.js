@@ -108,9 +108,18 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 //fetch stats
-function fetchStats(req) {
+async function fetchStats(req) {
     var stats = [];
-    // stats = db.query('SELECT * FROM stats WHERE userID = ? ', [req]);
+     db.query('SELECT * FROM stats WHERE userID = ? ORDER BY gamesplayed desc LIMIT 1', [req]);
+    var statsQuery = await database.runQuery('SELECT username, score FROM stats JOIN userlist ON stats. WHERE userID = ? userID = userlist.id ORDER BY score desc LIMIT 3', [req]);
+    leaderboardQuery.result.forEach((entry) => {
+        leaderBoard.push({
+            gamesplayed: entry.gamesplayed,
+            score: entry.score,
+            time: entry.time
+        });
+    });
+  
     return stats;
 }
 
@@ -129,7 +138,7 @@ async function createLeaderBoard() {
 
     leaderboardQuery = await database.runQuery('SELECT username, score, time FROM stats JOIN userlist ON stats.userID = userlist.id ORDER BY score desc LIMIT 10');
     leaderboardQuery.result.forEach((entry) => {
-        leaderBoard.append({
+        leaderBoard.push({
             user: entry.username,
             score: entry.score,
             time: entry.time
