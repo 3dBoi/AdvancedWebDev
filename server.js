@@ -2,7 +2,8 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 
-const db = require ('./database').db;
+const database = require ('./database');
+const runQuery = require('./database');
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
@@ -14,20 +15,7 @@ const methodOverride = require('method-override');
 
 const initializePassport = require('./passport-config');
 const res = require('express/lib/response');
-//enthält getUserById und getUserByEmail
-initializePassport(
-  passport,
-  email => db.query('SELECT * FROM userlist WHERE email = ?', [email], (error, result, fields) => {
-    if (error)
-      return undefined;
-    return result[0].username || undefined;
-  }),
-  id => users.find(user => user.id === id)
-);
-
-
-//Users später in Datenbank!!!
-const users = []
+initializePassport(passport);
 
 app.set('view-engine', 'ejs');
 app.use(express.urlencoded({extended: false}));
@@ -73,17 +61,12 @@ app.get('/game', (req, res) => {
 
 app.post('/login', checkNotAuthenticated, async (req, res) => {//passport.authenticate('local',{
     try {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10)
-
-      db.query('SELECT id FROM userlist WHERE email = ? AND password = ?', [req.body.email, hashedPassword ]);
-
-      console.log(db.query('SELECT id FROM userlist WHERE email = ? AND password = ?', [req.body.email, hashedPassword ]));
-
+      const response = await database.runQuery('SELECT id FROM userlist WHERE email = ?', [req.body.email]);
+      console.log(response.result);
     } catch (error) {
       res.redirect('/login');
     }
 
-   
     successRedirect: '/';
     //failureRedirect: '/login',
    // failureFlash: true
@@ -91,15 +74,13 @@ app.post('/login', checkNotAuthenticated, async (req, res) => {//passport.authen
 
 app.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
         // TODO: Check for existance
-        db.query('INSERT INTO userlist (email, username, password) VALUES ( ?, ?, ?)', [req.body.email, req.body.name, hashedPassword]);
-       // res.redirect('/login');
-       res.redirect('/');
+        await runQuery('INSERT INTO userlist (email, username, password) VALUES (?, ?, ?)', [req.body.email, req.body.name, hashedPassword]);
+        res.redirect('/');
     } catch {
         res.redirect('/register');
     }
-    console.log(users);
 })
 
 //delte request zum ausloggen
@@ -124,5 +105,35 @@ function checkNotAuthenticated(req, res, next) {
     }
     next();
   }
+
+//fetch stats
+function fetchStats(req){
+var stats = [];
+stats = db.query('SELECT * FROM stats WHERE userID = ? ', [req]);
+return stats;
+}
+
+//create leaderBoard
+function createLeaderBoard() {
+var leaderBoard = [];
+let leaderBoardConstructor0 = [];
+let leaderBoardConstructor1 = [];
+let leaderBoardConstructor2 = [];
+
+leaderBoardConstructor0= db.query('SELECT userID,gamesplayed,personalBestScore0,personalBestTime0 FROM stats ORDER BY personalBestScore0 desc');
+
+leaderBoardConstructor1= db.query('SELECT userID,gamesplayed,personalBestScore1,personalBestTime1 FROM stats ORDER BY personalBestScore1 desc');
+
+leaderBoardConstructor2= db.query('SELECT userID,gamesplayed,personalBestScore2,personalBestTime2 FROM stats ORDER BY personalBestScore2 desc');
+
+ //leaderBoard[];
+
+ return leaderBoard;
+}
+
+
+//gameOverDBwrite
+function deathWrite(id, Score, time)
+db.query('UPDATE')
 
 app.listen(3000);

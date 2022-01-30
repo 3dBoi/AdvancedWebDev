@@ -3,7 +3,7 @@ require ("dotenv").config();
 
 
 var con = mysql.createConnection({
-  host: "munir.enteentelos.com",
+  host: process.env.DB_URL || "localhost",
   database: "database",
   user: "Bob",
   password: process.env.DB_PWD
@@ -14,4 +14,27 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
-module.exports.db = con;
+function runQuery(query, args) {
+  return new Promise((resolve, reject) => {
+    if (args) {
+      con.query(query, args, (err, result, fields) => {
+        return err ? reject(err) : resolve({
+          result: result,
+          fields: fields
+        });
+      })
+    } else {
+      con.query(query, (err, result, fields) => {
+        return err ? reject(err) : resolve({
+          result: result,
+          fields: fields
+        });
+      })
+    }
+  })
+}
+
+module.exports = {
+  db: con,
+  runQuery: runQuery
+};
