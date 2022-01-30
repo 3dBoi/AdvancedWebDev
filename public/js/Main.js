@@ -83,9 +83,9 @@ function gameOver(){
         method: 'POST',
         body: data
     }).then(() => {
-        document.getElementById("feedback").innerHTML = "Status: synced with server";
+      //  document.getElementById("feedback").innerHTML = "Status: synced with server";
     }).catch((reason) => {
-        document.getElementById("feedback").innerHTML = "Status: failed: " + reason;
+      //  document.getElementById("feedback").innerHTML = "Status: failed: " + reason;
     });
 }
 
