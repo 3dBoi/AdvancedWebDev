@@ -14,8 +14,8 @@
 	<body>
         <main>
           <div>
-            <p>Games played:</p>
-            <p id="gamesPlayed"></p>
+            <p>Games played: </p>
+            <%= entry.gamesplayed %>
           </div>
           <table id="statsTable">
             <tr>
@@ -23,21 +23,19 @@
               <th>Score</th>
               <th>Time</th>
             </tr>
-           <!-- <tr>
-              <th>01</th>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>02</th>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>03</th>
-              <th></th>
-              <th></th>
-            </tr>-->
+            <% entries.forEach((entry, index) => { %>
+              <tr>
+                <th>
+                  <%= index + 1 %>.
+                </th>
+                <th>
+                  <%= entry.score %>
+                </th>
+                <th>
+                  <%= entry.time %>
+                </th>
+              </tr>
+              <% }) %>
           </table>
         </main>
     </body>
