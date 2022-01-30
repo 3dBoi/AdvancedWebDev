@@ -39,7 +39,7 @@ app.use('images', express.static(__dirname + 'public/images'));
 //app.use(express.static('../HacknDashAWD/resources/css/' + 'game.css'));
 
 //displayt index.ejs 
-app.get('/', checkAuthenticated, (req, res) => {
+app.get('/', checkAuthenticated,  (req, res) => {
     res.render('index.ejs', {name: req.user.name});
 });
 
@@ -97,12 +97,14 @@ app.get('/profile', checkAuthenticated, async (req, res) => {
     const stats = await fetchStats(req.user.id); // < id should exist, since the user has to be authenticated to be here
     const gamesplayedQuery = await database.runQuery('SELECT MAX(gamesplayed) AS gamesplayed FROM stats WHERE userID = ? LIMIT 1', [req.user.id]);
     var gamesplayed = 0;
+    var name = res.body.username;
     if (gamesplayedQuery.result.length && gamesplayedQuery.result[0].gamesplayed != null) {
         gamesplayed = gamesplayedQuery.result[0].gamesplayed;
     }
     res.render('profile.ejs', {
         entries: stats,
-        gamesplayed: gamesplayed
+        gamesplayed: gamesplayed,
+        name: name
     });
 });
 
