@@ -3,7 +3,7 @@ require ("dotenv").config();
 
 
 var con = mysql.createConnection({
-  host: process.env.DB_URL || "localhost",
+  host: "localhost" || process.env.DB_URL,
   database: "HacknDash",
   user: "Bob",
   password: process.env.DB_PWD

@@ -6,7 +6,7 @@ INSERT INTO userlist (id, email, username, password) VALUES
     (3, 'munir.ali@hshl.de', 'Munir', '$2b$10$mYtyiGO0FezuKc7nPmU.ZeebP3LAC32q2zEkxeXig1QtDavbpj3Vu'),
     (4, 'bob@bob.com', 'BOb', '$2b$10$RbGtgKoRFndjJCXrEbpImOkcmGXjRKgskhHjiqXHLBXxXCM3EFCAa'),
     (5, 'christian@hshl.de', 'Chris', '$2b$10$5xmb6a0bn1cR.wkzPAVOW.KgVXKEkj7DhaB9Cp7nkYr/sVe0cGkfC'),
-    (6, 'janiskarl@hshl.de', 'Janisch', '$2b$10$w.rXRkcpmphDn.qv5o0tN.j6CQF3JhuWOI.ZmlEsivQ1qzPQY4noe')
+    (6, 'janiskarl@hshl.de', 'Janisch', '$2b$10$w.rXRkcpmphDn.qv5o0tN.j6CQF3JhuWOI.ZmlEsivQ1qzPQY4noe'),
     (7, 'anton@hshl.de', 'AAAnton', '$2b$10$ODFVsmgbJUTUWgf3qVIzmu.s.ZYKUW5RdLjRUHxweZYja/t0Migr6')
 ;
 
